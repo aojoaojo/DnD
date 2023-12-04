@@ -1,9 +1,6 @@
 import requests
-import os
-
-from pywebio.session import go_app
 from pywebio.pin import *
-from pywebio import session, config, start_server
+from pywebio import session, config
 from pywebio.input import *
 from pywebio.output import *
 
