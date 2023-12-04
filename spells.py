@@ -77,7 +77,6 @@ def check_response(response):
     if response.status_code == 200:
         spells_data = response.json()
         spells = spells_data['results']
-        # print_menu(spells_data, spells)
         novoMenu(spells_data, spells)
 
 
@@ -85,7 +84,6 @@ def check_response(response):
 @use_scope('direita', clear=True)
 def primeira_opcao(spells, spellData):
 
-    # print(spellData)
     put_markdown("## Lista das Spells:")
     for index, spell in enumerate(spellData['results']):
         put_markdown('### '+ str(index + 1) + ' - ' + str(spell['name']))
@@ -124,34 +122,3 @@ def display_spells_info(index, spellData):
     
 if __name__ == "__main__":
     main()
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-def print_menu(spells_data, spells):
-    print('Welcome to the DnD 5e Spellbook!')
-    print('Total de Spells: ', spells_data['count'])
-    
-    while True:
-        print("Comandos:")
-        print("1 - Listar todas as Spells.")
-        print("2 - Procurar uma Spell por nome.")
-        print("3 - Sair.")
-        
-        choice = input("Digite sua escolha: ")
-        
-        if choice == '1':
-            primeira_opcao(spells)
-        elif choice == '2':
-            segunda_opcao(spells)
