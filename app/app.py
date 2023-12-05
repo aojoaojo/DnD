@@ -1,8 +1,8 @@
-import requests
 from pywebio.pin import *
 from pywebio import session, config
 from pywebio.input import *
 from pywebio.output import *
+import json
 
 url = "https://www.dnd5eapi.co/api/spells"
 headers = {'Accept' : 'application/json'}
@@ -44,8 +44,11 @@ css = """
 
 def main():
     
-    response = requests.get(url, headers = headers)
-    check_response(response)
+    with open('db/spells.json', 'r') as f:
+        dados = f.read()
+        f.close()
+
+    check_response(dados)
 
 
 
@@ -70,11 +73,10 @@ def novoMenu(spells, spells_data):
     
 
 
-def check_response(response): 
-    if response.status_code == 200:
-        spells_data = response.json()
-        spells = spells_data['results']
-        novoMenu(spells, spells_data)
+def check_response(dados): 
+    spells_data = json.loads(dados)
+    spells = spells_data['results']
+    novoMenu(spells, spells_data)
 
 
 
