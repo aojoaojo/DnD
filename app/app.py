@@ -50,7 +50,7 @@ def main():
 
 
 @config(theme="minty", css_style=css)
-def novoMenu(spells_data, spells):
+def novoMenu(spells, spells_data):
     session.set_env(title='spells', output_max_width='100%')
     
     put_row(
@@ -60,13 +60,13 @@ def novoMenu(spells_data, spells):
     
     with use_scope('esquerda'):
         put_markdown('## Selecione a opção desejada: '),
-        put_button(['Listar todas as Spells'], onclick=lambda: primeira_opcao(spells, spells_data)),
+        put_button(['Listar todas as Spells'], onclick=lambda: primeira_opcao(spells)),
         put_button(['Pesquisar por uma Spell'], onclick=lambda:segunda_opcao(spells))
 
 
     with use_scope('direita'):
         put_markdown('# Bem-vindo(a) ao livro de Spells de DnD 5e!')
-        put_markdown('#### Total de Spells: ' +str(spells_data['count']))
+        put_markdown('## Total de Spells: ' +str(spells_data['count']))
     
 
 
@@ -74,23 +74,23 @@ def check_response(response):
     if response.status_code == 200:
         spells_data = response.json()
         spells = spells_data['results']
-        novoMenu(spells_data, spells)
+        novoMenu(spells, spells_data)
 
 
 
 @use_scope('direita', clear=True)
-def primeira_opcao(spells, spellData):
+def primeira_opcao(spells):
 
-    put_markdown("## Lista das Spells:")
-    for index, spell in enumerate(spellData['results']):
-        put_markdown('### '+ str(index + 1) + ' - ' + str(spell['name']))
+    put_markdown("# Lista das Spells:")
+    for index, spell in enumerate(spells):
+        put_markdown('## '+ str(index + 1) + ' - ' + str(spell['name']))
             
             
 def segunda_opcao(spells):
     with use_scope('direita'):
         spellName = input("Digite a Spell que dejesa procurar: ")
         matching_spells = [spell for spell in spells if spellName in spell['name'].lower()]
-        put_markdown("## Spells encontradas:")
+        put_markdown("# Spells encontradas:")
 
         for index, spell in enumerate(matching_spells):
             spellInfo = requests.get(urlInfo+spell['url'], headers = headers).json()
@@ -101,20 +101,21 @@ def segunda_opcao(spells):
 def display_spells_info(index, spellData):
     put_markdown('## ' + str(index + 1) + ' - ' + spellData['name'])
     
+    put_markdown('### Descrição: ')
     for item in spellData['desc']:
-        put_markdown("###     " + item)
+        put_markdown("####     " + item)
         
-    put_markdown("###     Duração: " + spellData['duration'])
-    put_markdown("###     Tempo para utilizar: " + spellData['casting_time'])
+    put_markdown("####     Duração: " + spellData['duration'])
+    put_markdown("####     Tempo para utilizar: " + spellData['casting_time'])
 
-    put_markdown("###     Classes: ")
+    put_markdown("####     Classes: ")
     for index, classe in enumerate(spellData['classes']):
-        put_markdown("###     " + str(index + 1) + ' - ' + classe['name'])
+        put_markdown("####     " + str(index + 1) + ' - ' + classe['name'])
     
     if len(spellData['subclasses']) != 0:
-        put_markdown("###     Subclasses: ")
+        put_markdown("####     Subclasses: ")
         for index, subclasse in enumerate(spellData['subclasses']):
-            put_markdown("###     " + index + ' - ' + subclasse['name'])
+            put_markdown("####     " + index + ' - ' + subclasse['name'])
     
     
 if __name__ == "__main__":
